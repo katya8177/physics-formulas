@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Формулы по физике</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+        }
+        
+        .list-group-item {
+            font-size: 1.2rem;
+        }
+
+        .section-link {
+            color: rgb(19, 42, 105);
+            text-decoration: none;
+            display: block;
+            margin: 5px 0;
+            font-size: 1.5rem;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="text-white text-center py-4">
+        <img src="static/images/image 2.png" alt="Изображение" class="img-fluid mb-4" style="width: 800px; height: auto;"> 
+        <nav class="nav flex-column justify-content-center">
+            {% for category in ['Кинематика', 'Динамика', 'Статика', 'Гидростатика', 'Импульс', 'Работа, мощность, энергия', 'Термодинамика', 'Электростатика', 'Электрический ток', 'Магнетизм', 'Оптика', 'Атомная и ядерная физика', 'Основы специальной теории относительности'] %}
+                <a class="section-link" href="#{{ category|lower }}">{{ category }}</a>
+            {% endfor %}
+        </nav>
+    </header>
+
+    <main class="container my-4">
+    {% for category in ['Кинематика', 'Динамика', 'Статика', 'Гидростатика', 'Импульс', 'Работа, мощность, энергия', 'Термодинамика', 'Электростатика', 'Электрический ток', 'Магнетизм', 'Оптика', 'Атомная и ядерная физика', 'Основы специальной теории относительности'] %}
+        <section id="{{ category|lower }}">
+            <h2 class="my-4">{{ category }}</h2>
+            <ul class="list-group">
+                {% for formula in formulas %}
+                    {% if formula[0] == category %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ formula[1] }}:</strong><br>
+                                {% for img in formula[2] %}
+                                    <img src="{{ img }}" alt="{{ formula[1] }}" class="img-fluid" style="max-width: 200px;">
+                                {% endfor %}
+                            </div>
+
+                            <button type="button" class="btn btn-primary btn-sm " data-toggle="modal" data-target="#modal{{ loop.index }}">
+                                Рассчитать
+                            </button>
+                        </li>
+                        <div class="modal fade" id="modal{{ loop.index }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">{{ formula[1] }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="formulaForm{{ loop.index }}">
+                                            {% if formula[1] == 'Путь при равномерном движении' %}
+                                                <div class="form-group">
+                                                    <label>Скорость (v):</label>
+                                                    <input type="number" name="v" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (t):</label>
+                                                    <input type="number" name="t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Средняя скорость' %}
+                                                <div class="form-group">
+                                                    <label>Путь (s):</label>
+                                                    <input type="number" name="s" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (t):</label>
+                                                    <input type="number" name="t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Ускорение при равноускоренном движении' %}
+                                                <div class="form-group">
+                                                    <label>Конечная скорость (v):</label>
+                                                    <input type="number" name="v" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Начальная скорость (v₀):</label>
+                                                    <input type="number" name="v0" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (t):</label>
+                                                    <input type="number" name="t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Зависимость скорости от времени' %}
+                                                <div class="form-group">
+                                                    <label>Начальная скорость (v₀):</label>
+                                                    <input type="number" name="v0" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ускорение (a):</label>
+                                                    <input type="number" name="a" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (t):</label>
+                                                    <input type="number" name="t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Перемещение при равноускоренном движении' %}
+                                                <div class="form-group">
+                                                    <label>Начальная скорость (v₀):</label>
+                                                    <input type="number" name="v0" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ускорение (a):</label>
+                                                    <input type="number" name="a" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (t):</label>
+                                                    <input type="number" name="t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Максимальная высота при вертикальном броске' %}
+                                                <div class="form-group">
+                                                    <label>Начальная скорость (v₀):</label>
+                                                    <input type="number" name="v0" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ускорение свободного падения (g):</label>
+                                                    <input type="number" name="g" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Время подъема' %}
+                                                <div class="form-group">
+                                                    <label>Начальная скорость (v₀):</label>
+                                                    <input type="number" name="v0" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ускорение свободного падения (g):</label>
+                                                    <input type="number" name="g" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Полное время полета' %}
+                                                <div class="form-group">
+                                                    <label>Начальная скорость (v₀):</label>
+                                                    <input type="number" name="v0" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ускорение свободного падения (g):</label>
+                                                    <input type="number" name="g" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Второй закон Ньютона' %}
+                                                <div class="form-group">
+                                                    <label>Масса (m):</label>
+                                                    <input type="number" name="m" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ускорение (a):</label>
+                                                    <input type="number" name="a" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Третий закон Ньютона' %}
+                                                <p>Эта формула не требует расчётов.</p>
+                                        
+                                            {% elif formula[1] == 'Сила упругости' %}
+                                                <div class="form-group">
+                                                    <label>Жёсткость пружины (k):</label>
+                                                    <input type="number" name="k" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Удлинение (x):</label>
+                                                    <input type="number" name="x" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Закон всемирного тяготения' %}
+                                                <div class="form-group">
+                                                    <label>Гравитационная постоянная (G):</label>
+                                                    <input type="number" name="G" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Масса 1 (m₁):</label>
+                                                    <input type="number" name="m1" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Масса 2 (m₂):</label>
+                                                    <input type="number" name="m2" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Расстояние между телами (r):</label>
+                                                    <input type="number" name="r" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Первая космическая скорость' %}
+                                                <div class="form-group">
+                                                    <label>Ускорение свободного падения (g):</label>
+                                                    <input type="number" name="g" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Радиус планеты (R):</label>
+                                                    <input type="number" name="R" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Момент силы определяется с помощью следующей формулы' %}
+                                                <div class="form-group">
+                                                    <label>Сила (F):</label>
+                                                    <input type="number" name="F" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Плечо силы (l):</label>
+                                                    <input type="number" name="l" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Условие при котором тело не будет вращаться' %}
+                                                <p>Эта формула не требует расчётов.</p>
+                                        
+                                            {% elif formula[1] == 'Определение давления задаётся следующей формулой' %}
+                                                <div class="form-group">
+                                                    <label>Сила (F):</label>
+                                                    <input type="number" name="F" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Площадь (S):</label>
+                                                    <input type="number" name="S" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Давление, которое создает столб жидкости находится по формуле' %}
+                                                <div class="form-group">
+                                                    <label>Плотность (ρ):</label>
+                                                    <input type="number" name="rho" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ускорение свободного падения (g):</label>
+                                                    <input type="number" name="g" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Высота столба (h):</label>
+                                                    <input type="number" name="h" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Идеальный гидравлический пресс' %}
+                                                <p>Эта формула не требует расчётов.</p>
+                                        
+                                            {% elif formula[1] == 'Любой гидравлический пресс' %}
+                                                <p>Эта формула не требует расчётов.</p>
+                                        
+                                            {% elif formula[1] == 'Сила Архимеда' %}
+                                                <div class="form-group">
+                                                    <label>Плотность жидкости (ρ):</label>
+                                                    <input type="number" name="rho" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ускорение свободного падения (g):</label>
+                                                    <input type="number" name="g" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Объём тела (V):</label>
+                                                    <input type="number" name="V" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Импульс тела' %}
+                                                <div class="form-group">
+                                                    <label>Масса (m):</label>
+                                                    <input type="number" name="m" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Скорость (v):</label>
+                                                    <input type="number" name="v" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Первый закон термодинамики' %}
+                                                <div class="form-group">
+                                                    <label>Теплота (Q):</label>
+                                                    <input type="number" name="Q" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Работа (A):</label>
+                                                    <input type="number" name="A" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Закон Кулона' %}
+                                                <div class="form-group">
+                                                    <label>Константа (k):</label>
+                                                    <input type="number" name="k" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Заряд 1 (q₁):</label>
+                                                    <input type="number" name="q1" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Заряд 2 (q₂):</label>
+                                                    <input type="number" name="q2" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Расстояние (r):</label>
+                                                    <input type="number" name="r" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Напряженность электрического поля' %}
+                                                <div class="form-group">
+                                                    <label>Сила (F):</label>
+                                                    <input type="number" name="F" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Заряд (q):</label>
+                                                    <input type="number" name="q" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Электрическое напряжение' %}
+                                                <div class="form-group">
+                                                    <label>Работа (A):</label>
+                                                    <input type="number" name="A" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Заряд (q):</label>
+                                                    <input type="number" name="q" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Закон Ома' %}
+                                                <div class="form-group">
+                                                    <label>Напряжение (U):</label>
+                                                    <input type="number" name="U" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Сопротивление (R):</label>
+                                                    <input type="number" name="R" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Работа электрического тока' %}
+                                                <div class="form-group">
+                                                    <label>Сила тока (I):</label>
+                                                    <input type="number" name="I" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Напряжение (U):</label>
+                                                    <input type="number" name="U" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (t):</label>
+                                                    <input type="number" name="t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Сила тока' %}
+                                                <div class="form-group">
+                                                    <label>Заряд (q):</label>
+                                                    <input type="number" name="q" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (t):</label>
+                                                    <input type="number" name="t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Сила Ампера' %}
+                                                <div class="form-group">
+                                                    <label>Магнитная индукция (B):</label>
+                                                    <input type="number" name="B" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Сила тока (I):</label>
+                                                    <input type="number" name="I" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Длина проводника (L):</label>
+                                                    <input type="number" name="L" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Синус угла (sin α):</label>
+                                                    <input type="number" name="alpha" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'ЭДС индукции' %}
+                                                <div class="form-group">
+                                                    <label>Изменение потока (∆Φ):</label>
+                                                    <input type="number" name="delta_phi" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (∆t):</label>
+                                                    <input type="number" name="delta_t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Сила Лоренца' %}
+                                                <div class="form-group">
+                                                    <label>Заряд (q):</label>
+                                                    <input type="number" name="q" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Скорость (v):</label>
+                                                    <input type="number" name="v" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Магнитная индукция (B):</label>
+                                                    <input type="number" name="B" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Синус угла (sin α):</label>
+                                                    <input type="number" name="alpha" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            <!-- Термодинамика -->
+                                            {% elif formula[1] == 'Количество теплоты' %}
+                                                <div class="form-group">
+                                                    <label>Удельная теплоёмкость (c):</label>
+                                                    <input type="number" name="c" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Масса (m):</label>
+                                                    <input type="number" name="m" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Изменение температуры (∆T):</label>
+                                                    <input type="number" name="delta_t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Работа идеального газа' %}
+                                                <div class="form-group">
+                                                    <label>Давление (P):</label>
+                                                    <input type="number" name="P" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Изменение объёма (∆V):</label>
+                                                    <input type="number" name="delta_V" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            <!-- Работа, мощность, энергия -->
+                                            {% elif formula[1] == 'Работа' %}
+                                                <div class="form-group">
+                                                    <label>Сила (F):</label>
+                                                    <input type="number" name="F" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Перемещение (s):</label>
+                                                    <input type="number" name="s" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Косинус угла (cos α):</label>
+                                                    <input type="number" name="cos_alpha" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Мощность' %}
+                                                <div class="form-group">
+                                                    <label>Работа (A):</label>
+                                                    <input type="number" name="A" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (t):</label>
+                                                    <input type="number" name="t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Кинетическая энергия' %}
+                                                <div class="form-group">
+                                                    <label>Масса (m):</label>
+                                                    <input type="number" name="m" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Скорость (v):</label>
+                                                    <input type="number" name="v" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Потенциальная энергия' %}
+                                                <div class="form-group">
+                                                    <label>Масса (m):</label>
+                                                    <input type="number" name="m" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Высота (h):</label>
+                                                    <input type="number" name="h" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ускорение свободного падения (g):</label>
+                                                    <input type="number" name="g" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Коэффициент полезного действия' %}
+                                                <div class="form-group">
+                                                    <label>Полезная работа (A_полезная):</label>
+                                                    <input type="number" name="A_pol" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Затраченная работа (A_затраченная):</label>
+                                                    <input type="number" name="A_zat" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            <!-- Оптика -->
+                                            {% elif formula[1] == 'Закон преломления' %}
+                                                <div class="form-group">
+                                                    <label>Синус угла падения (sin α):</label>
+                                                    <input type="number" name="sin_a" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Синус угла преломления (sin β):</label>
+                                                    <input type="number" name="sin_b" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Показатель преломления среды 1 (n₁):</label>
+                                                    <input type="number" name="n1" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Показатель преломления среды 2 (n₂):</label>
+                                                    <input type="number" name="n2" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Формула тонкой линзы' %}
+                                                <div class="form-group">
+                                                    <label>Расстояние до предмета (d):</label>
+                                                    <input type="number" name="d" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Расстояние до изображения (f):</label>
+                                                    <input type="number" name="f" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Оптическая длина' %}
+                                                <div class="form-group">
+                                                    <label>Показатель преломления (n):</label>
+                                                    <input type="number" name="n" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Длина пути (l):</label>
+                                                    <input type="number" name="l" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            <!-- Атомная физика -->
+                                            {% elif formula[1] == 'Энергия кванта' %}
+                                                <div class="form-group">
+                                                    <label>Постоянная Планка (h):</label>
+                                                    <input type="number" name="h" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Частота (ν):</label>
+                                                    <input type="number" name="nu" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Закон радиоактивного распада' %}
+                                                <div class="form-group">
+                                                    <label>Начальное количество (N₀):</label>
+                                                    <input type="number" name="N0" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Период полураспада (T):</label>
+                                                    <input type="number" name="half_life" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Время (t):</label>
+                                                    <input type="number" name="t" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Второй постулат Бора или правило частот' %}
+                                                <div class="form-group">
+                                                    <label>Энергия уровня 2 (E₂):</label>
+                                                    <input type="number" name="E2" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Энергия уровня 1 (E₁):</label>
+                                                    <input type="number" name="E1" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Постоянная Планка (h):</label>
+                                                    <input type="number" name="h" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            <!-- Теория относительности -->
+                                            {% elif formula[1] == 'Релятивистская масса' %}
+                                                <div class="form-group">
+                                                    <label>Покоящаяся масса (m₀):</label>
+                                                    <input type="number" name="m0" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Скорость (v):</label>
+                                                    <input type="number" name="v" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Скорость света (c):</label>
+                                                    <input type="number" name="c" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Полная энергия' %}
+                                                <div class="form-group">
+                                                    <label>Масса (m):</label>
+                                                    <input type="number" name="m" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Скорость света (c):</label>
+                                                    <input type="number" name="c" class="form-control" required step="any">
+                                                </div>
+                                        
+                                            {% elif formula[1] == 'Энергия покоя тела' %}
+                                                <div class="form-group">
+                                                    <label>Масса (m):</label>
+                                                    <input type="number" name="m" class="form-control" required step="any">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Скорость света (c):</label>
+                                                    <input type="number" name="c" class="form-control" required step="any">
+                                                </div>
+
+
+
+                                            {% else %}
+                                                <p>Формула не поддерживает расчёт.</p>
+                                            {% endif %}
+                                        </form>
+                                        <div id="result{{ loop.index }}"></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Закрыть</button>
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="calculateFormula({{ loop.index }}, '{{ formula[1] | urlencode }}')">
+                                            Рассчитать
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+    {% endfor %}
+</main>
+    
+    <footer class="text-center py-4">
+        <p>&copy; 2025 Формулы по физике</p>
+    </footer>
+    <script>
+    function calculateFormula(index, formulaName) {
+        const form = document.getElementById('formulaForm' + index);
+        const formData = new FormData(form);
+        const data = {};
+        for (const [key, value] of formData.entries()) {
+            data[key] = parseFloat(value);
+        }
+
+        fetch('/api/calculate/' + formulaName, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            const resultDiv = document.getElementById('result' + index);
+            resultDiv.innerHTML = `<p class="mt-3"><strong>Результат:</strong> ${result.result}</p>`;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            const resultDiv = document.getElementById('result' + index);
+            resultDiv.innerHTML = `<p class="text-danger mt-3">Ошибка: ${error.message}</p>`;
+        });
+    }
+</script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
